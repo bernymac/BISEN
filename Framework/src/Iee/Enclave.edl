@@ -1,0 +1,51 @@
+enclave {
+    from "sgx_tstdc.edl" import *; // threading
+    from "sgx_tprotected_fs.edl" import *; // file i/o for debug
+    from "mbedtls_SGX.edl" import *; // mbedtls_sgx
+    include "trusted_mbedtls.h" // mbedtls_sgx
+    include "types.h"
+
+    trusted {
+        public void ecall_init_enclave(unsigned nr_threads);
+        public void ecall_thread_enter();
+        //public void ecall_process([out]void** out, [out]size_t* out_len, [in, size = in_len]const void* in, size_t in_len);
+
+        // mbedtls_sgx
+        public void ssl_conn_init(void);
+        public void ssl_conn_teardown(void);
+        public void ssl_conn_handle(long int thread_id, [in,out] thread_info_t* thread_info);
+    };
+
+    untrusted {
+        // printing and debug
+        void ocall_string_print([in, string] const char *str);
+
+        // i/o
+        int ocall_open([in, string]const char* filename, int mode);
+        ssize_t ocall_read(int file, [out, size=len]void *buf, size_t len);
+        ssize_t ocall_write(int file, [in, size=len]const void *buf, size_t len);
+        void ocall_close(int file);
+
+        // misc
+        void ocall_exit(int code);
+        untrusted_time ocall_curr_time();
+        int ocall_open_socket([string,in]const char* addr, int port);
+        void ocall_socket_receive(int file, [out, size=len]void *buf, size_t len);
+        void ocall_socket_send(int file, [in, size=len]const void *buf, size_t len);
+
+        int ocall_open_uee_connection();
+        void ocall_uee_process(int socket, [out]void** out, [out]size_t* out_len, [in, size = in_len]const void* in, size_t in_len);
+        void ocall_close_uee_connection(int socket);
+
+        // outside allocation
+        void* ocall_untrusted_malloc(size_t length);
+        void ocall_untrusted_free(size_t pointer); // we use size_t as we only need the pointer to the malloc, and not the value pointed too, as sgx would assume if passing void*
+
+        // DEBUG: for outside kmeans
+        void ocall_set(size_t num_elems, [user_check]float* buffer);
+        float* ocall_get(int pos);
+
+        // outside comm
+        int ocall_process([out]void** out, [out]size_t* out_len, [in, size = in_len]const void* in, size_t in_len);
+    };
+};
