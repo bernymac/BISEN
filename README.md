@@ -4,7 +4,7 @@ BISEN is a searchable symmetric encryption scheme, allowing for secure boolean q
 
 A full description of this project was published here: https://ieeexplore.ieee.org/abstract/document/9149632 (alternate link: https://www.di.fc.ul.pt/~blferreira/papers/tsdc20.pdf).
 
-If you are to use this project, please cite: Ferreira, B., Portela, B., Oliveira, T., Borges, G., Domingos, H. J., & Leitao, J. (2020). Boolean Searchable Symmetric Encryption with Filters on Trusted Hardware. IEEE Transactions on Dependable and Secure Computing.
+If you are to use this project, please cite: B. Ferreira, B. Portela, T. Oliveira, G. Borges, H. Domingos and J. Leitão, Boolean Searchable Symmetric Encryption With Filters on Trusted Hardware, in IEEE Transactions on Dependable and Secure Computing, vol. 19, no. 2, pp. 1307-1319, 1 March-April 2022.
 
 ----
 
